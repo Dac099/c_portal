@@ -13,6 +13,7 @@ export async function getClients(): Promise<ClientFormData[]> {
       name: 'Juan Pérez',
       email: 'juan.perez@email.com',
       phone: '555-0123',
+      companyId: '1'
     },
     {
       id: '2',

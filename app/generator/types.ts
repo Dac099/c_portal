@@ -3,6 +3,7 @@ export type ClientFormData = {
   name: string;
   email: string;
   phone: string;
+  companyId?: string;
 };
 
 export type CompanyFormData = {
