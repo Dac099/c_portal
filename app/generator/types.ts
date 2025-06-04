@@ -24,7 +24,6 @@ export type QuoteItemFormData = {
   typeId: string;
 };
 
-
 export type QuoteTypeFormData = {
   id: string;
   name: string;

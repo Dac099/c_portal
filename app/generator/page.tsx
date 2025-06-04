@@ -7,6 +7,7 @@ import {
   getProducts
 } from './actions/fetch-data';
 import { ClientData } from '@/components/routes/generator/client_data/client-data';
+import QuoteItems from '@/components/routes/generator/quote_items/quote-items';
 
 export default async function Page(){
   const clients = await getClients();
@@ -22,6 +23,14 @@ export default async function Page(){
           <ClientData 
             companies={companies}
             clients={clients}
+          />
+        </section>
+
+        <h2 className={styles.section_title}>Productos de la cotización</h2>
+        <section>
+          <QuoteItems
+            products={products}
+            quoteType={quoteTypes}
           />
         </section>
       </Form>

@@ -1,0 +1,16 @@
+.product_form
+{
+  margin: 0 auto;
+  min-width: 320px;
+  max-width: 600px;
+}
+
+.input_field
+{
+  margin: 25px 0;
+}
+
+.error_message
+{
+  margin-top: 0.5rem;
+}
