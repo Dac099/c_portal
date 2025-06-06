@@ -10,6 +10,7 @@ type Props = {
   products: QuoteItemFormData[];
   quoteType: QuoteTypeFormData[];
 };
+//TODO: Cambiar el tipo de productsList para que sea un objeto que contenga el valor del producto y del tipo
 
 export default function QuoteItems({ products, quoteType }: Props) {
   const [visible, setVisible] = useState(true);
@@ -26,7 +27,6 @@ export default function QuoteItems({ products, quoteType }: Props) {
           products={products}
           productsTypes={quoteType}
           closeDialog={() => setVisible(false)}
-          productsList={productsList}
           setProductsList={setProductsList}
         />
       </Dialog>
