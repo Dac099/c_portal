@@ -13,11 +13,16 @@ import { FloatLabel } from 'primereact/floatlabel';
 import { Divider } from 'primereact/divider';
 import { isFormFullFilled } from '../../helpers';
 
+type ListItem = {
+  item: Partial<QuoteItemFormData>;
+  type: Partial<QuoteTypeFormData>;
+};
+
 type Props = {
   products: QuoteItemFormData[];
   productsTypes: QuoteTypeFormData[];
   closeDialog: () => void;
-  setProductsList: React.Dispatch<React.SetStateAction<Partial<QuoteItemFormData>[]>>;
+  setProductsList: React.Dispatch<React.SetStateAction<Partial<ListItem>[]>>;
 };
 
 export function ProductForm({
@@ -29,18 +34,51 @@ export function ProductForm({
   const [onError, setOnError] = useState<boolean>(false);
   const [productTypeSelected, setProductTypeSelected] = useState<Partial<QuoteTypeFormData> | undefined>(undefined);
   const [productSelected, setProductSelected] = useState<Partial<QuoteItemFormData> | undefined>(undefined);
+  const [productsForm, setProductsForm] = useState<QuoteItemFormData[]>(products);
 
   const handleSaveData = () => {
     if (!isFormFullFilled(productSelected, productTypeSelected)) {
+      console.log(productSelected, productTypeSelected);
       setOnError(true);
       return;
     }
 
-    //TODO: Cuando se agregue el productList nuevo, validar su existencia para saber si agregar o sumar cantidad
+    setProductsList(currentProducts => {
+      const newProduct: ListItem = {
+        item: {
+          ...productSelected,
+          typeId: productTypeSelected?.id,
+        },
+        type: {
+          ...productTypeSelected,
+        },
+      };
+
+      const productIndex = currentProducts.findIndex(item => item!.item!.name === productSelected!.name);
+
+      if(productIndex < 0){ //The product does not exist
+        return [...currentProducts, newProduct];
+      }
+
+      const productsCopy = [...currentProducts];
+      productsCopy[productIndex]!.item!.quantity! += newProduct.item!.quantity || 1;
+
+      return productsCopy;
+    });
+
+    setOnError(false);
     setProductSelected(undefined);
     setProductTypeSelected(undefined);
-    setOnError(false);
     closeDialog();
+  };
+
+  const filterProductsById = (id: string | undefined) => {
+    if (!id) {
+      setProductsForm(products);
+      return;
+    }
+
+    setProductsForm(products.filter(product => product.typeId === id));
   };
 
   return (
@@ -49,13 +87,17 @@ export function ProductForm({
           placeholder='Selecciona el tipo de producto'
           options={productsTypes}
           optionLabel='name'
-          onChange={e => setProductTypeSelected(e.value)}
+          onChange={e => {
+            setProductTypeSelected(e.value);
+            filterProductsById(e.value?.id);
+          }}
           value={productTypeSelected}
           showClear
           style={{
             marginBottom: '1rem',
             width: '100%',
-          }}        
+          }}  
+          filter      
         />
 
         <section className={styles.input_field}>
@@ -109,8 +151,9 @@ export function ProductForm({
         <Divider />
 
         <Dropdown 
+          filter
           placeholder='Selecciona el producto'
-          options={products}
+          options={productsForm}
           optionLabel='name'
           style={{ width: '100%', margin: '1rem 0' }}
           showClear
@@ -192,18 +235,109 @@ export function ProductForm({
           }
         </section>
 
+        {productTypeSelected && productTypeSelected.name === 'Carrocerías' && 
+          <>
+            <section className={styles.input_field}>
+              <FloatLabel>
+                <label htmlFor="width">Ancho</label>
+                <InputNumber
+                  id='width'
+                  value={productSelected?.width}
+                  mode='decimal'
+                  step={0.1}
+                  minFractionDigits={1}
+                  style={{ width: '100%' }}
+                  onValueChange={e => setProductSelected({
+                    ...productSelected,
+                    width: e.value || undefined
+                  })}
+                  suffix=' cm'
+                />
+              </FloatLabel>
+              {onError && !(productSelected?.width) &&
+                <article className={styles.error_message}>
+                  <Message
+                    severity='error'
+                    text='Se requiere el ancho'
+                    style={{ width: '100%' }}
+                  />
+                </article>
+              }
+            </section>
+
+            <section className={styles.input_field}>
+              <FloatLabel>
+                <label htmlFor="height">Alto</label>
+                <InputNumber
+                  id='height'
+                  value={productSelected?.height}
+                  mode='decimal'
+                  step={0.1}
+                  minFractionDigits={1}
+                  style={{ width: '100%' }}
+                  onValueChange={e => setProductSelected({
+                    ...productSelected,
+                    width: e.value || undefined
+                  })}
+                  prefix=' cm'
+                />
+              </FloatLabel>
+              {onError && !(productSelected?.width) &&
+                <article className={styles.error_message}>
+                  <Message
+                    severity='error'
+                    text='Se requiere el alto'
+                    style={{ width: '100%' }}
+                  />
+                </article>
+              }
+            </section>
+            
+            <section className={styles.input_field}>
+              <FloatLabel>
+                <label htmlFor="length">Largo</label>
+                <InputNumber
+                  id='length'
+                  value={productSelected?.width}
+                  mode='decimal'
+                  step={0.1}
+                  minFractionDigits={1}
+                  style={{ width: '100%' }}
+                  onValueChange={e => setProductSelected({
+                    ...productSelected,
+                    width: e.value || undefined
+                  })}
+                  prefix='cm'
+                />
+              </FloatLabel>
+              {onError && !(productSelected?.width) &&
+                <article className={styles.error_message}>
+                  <Message
+                    severity='error'
+                    text='Se requiere el largo'
+                    style={{ width: '100%' }}
+                  />
+                </article>
+              }
+            </section>
+          </>
+        }
+
         <section className={styles.input_field}>
           <FloatLabel>
             <label htmlFor="product_quantity">Cantidad del producto</label>
             <InputNumber
               id='product_quantity'
-              value={productSelected?.quantity || 1}
-              min={1}
+              value={productSelected?.quantity}
+              mode='decimal'
               style={{ width: '100%' }}
-              onValueChange={e => setProductSelected({
+              onValueChange={e => {
+                console.log(e.value);
+                setProductSelected({
                 ...productSelected,
-                quantity: e.value || 1
-              })}
+                quantity: e.value ?? undefined
+              })
+              }}
             />
           </FloatLabel>
           {onError && !(productSelected?.quantity) &&
