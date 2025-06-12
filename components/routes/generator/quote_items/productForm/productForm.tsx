@@ -279,7 +279,7 @@ export function ProductForm({
                     ...productSelected,
                     width: e.value || undefined
                   })}
-                  prefix=' cm'
+                  suffix=' cm'
                 />
               </FloatLabel>
               {onError && !(productSelected?.width) &&
@@ -307,7 +307,7 @@ export function ProductForm({
                     ...productSelected,
                     width: e.value || undefined
                   })}
-                  prefix='cm'
+                  suffix=' cm'
                 />
               </FloatLabel>
               {onError && !(productSelected?.width) &&
@@ -330,13 +330,14 @@ export function ProductForm({
               id='product_quantity'
               value={productSelected?.quantity}
               mode='decimal'
+              min={0}
               style={{ width: '100%' }}
-              onValueChange={e => {
+              onChange={e => {
                 console.log(e.value);
                 setProductSelected({
-                ...productSelected,
-                quantity: e.value ?? undefined
-              })
+                  ...productSelected,
+                  quantity: e.value || 1
+                });
               }}
             />
           </FloatLabel>

@@ -1,4 +1,109 @@
 .item_card
 {
-  margin: 10px 0;
+  margin-top: 20px;
+}
+
+.item_card p {
+  margin: 0;
+}
+
+.item_card_header
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.item_card_header_title p:first-child 
+{
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.item_card_header_title p:last-child 
+{
+  font-size: 0.9rem;
+  color: var(--bluegray-300);
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.item_card_body
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.item_card_body p 
+{
+  font-size: 1.3rem;
+  font-weight: bold
+}
+
+.empty_list_text
+{
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.items_control
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.items_control p 
+{
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.items_control_btns
+{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.item_card_measurements
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.item_card_measurements table {
+  width: 100%;
+  border-collapse: separate; 
+  border-spacing: 2px; 
+  margin-top: 10px;
+  border-radius: 5px;
+  overflow: hidden; 
+}
+
+.item_card_measurements th, 
+.item_card_measurements td {
+  padding: 8px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.item_card_measurements th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.item_card_description
+{
+  margin-top: 20px;
+  color: var(--bluegray-300);
 }
